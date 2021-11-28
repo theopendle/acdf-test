@@ -18,6 +18,6 @@
     "author": "Theo Pendle <theopendle@gmail.com>",
     "license": "ISC",
     "dependencies": {
-        "@acdf/build": "file:../../acdf/acdf-build"
+        "@acdf/build": "^1.0.0"
     }
 }
