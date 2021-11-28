@@ -2,6 +2,9 @@
     "name": "@acdf/test",
     "version": "1.0.0",
     "description": "ACDF testing framework",
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org"
+    },
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
