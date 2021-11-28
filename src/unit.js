@@ -41,5 +41,5 @@ function activity(global) {
 module.exports = {
     loadExterns: loadExterns,
     library: library,
-    activity: activity
+    activity: activity,
 };
