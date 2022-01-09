@@ -1,7 +1,7 @@
 const common = require("@acdf/build").common;
 const path = require("path");
 
-const LIBRARY_MAP = common.buildLibraryMap(common.paths.absolute.MODULE_DIR, {});
+const LIBRARY_MAP = common.buildLibraryMap(common.paths.dist.absolute.MODULE_DIR, {});
 
 /**
  * Loads the extern functions and properties into the global scope. Used to replicate the global JS scope within an
@@ -24,7 +24,7 @@ function loadIntoScope(global, requirePath) {
 }
 
 function library(global, libraryName) {
-    const libraryPath = LIBRARY_MAP[`${CONFIG.namespace}:${libraryName}`];
+    const libraryPath = LIBRARY_MAP[`${common.CONFIG.namespace}:${libraryName}`];
 
     if (!libraryPath) {
         throw `Attempting to test file ${libraryPath}, but it is not a library`;
