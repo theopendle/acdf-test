@@ -4,18 +4,14 @@ const path = require("path");
 const LIBRARY_MAP = common.buildLibraryMap(common.paths.dist.absolute.MODULE_DIR, {});
 
 /**
- * Loads the extern functions and properties into the global scope. Used to replicate the global JS scope within an
- * Adobe Campaign workflow.
- *
- * @param  {global} global the global scope object
+ * Loads the functions and properties  of the file at requirePath into the global scope. 
+ * 
+ * Used to replicate the global JS scope within an Adobe Campaign environment and to simulate
+ * loadLibrary() using CommonJS.
+ * 
+ * @param {object} global the global object
+ * @param {string} requirePath path to a CommonJS module
  */
-function loadExterns(global) {
-    const externs = require();
-    for (let key of Object.keys(externs)) {
-        global[key] = externs[key];
-    }
-}
-
 function loadIntoScope(global, requirePath) {
     const externs = require(requirePath);
     for (let key of Object.keys(externs)) {
@@ -23,23 +19,28 @@ function loadIntoScope(global, requirePath) {
     }
 }
 
+function loadBasics(global) {
+    loadIntoScope(global, path.resolve(process.cwd(), "externs.js"));
+    global.loadLibrary = name => require(LIBRARY_MAP[name])
+}
+
 function library(global, libraryName) {
+    loadBasics(global);
+
     const libraryPath = LIBRARY_MAP[`${common.CONFIG.namespace}:${libraryName}`];
 
     if (!libraryPath) {
-        throw `Attempting to test file ${libraryPath}, but it is not a library`;
+        throw `Attempting to test file ${libraryName}, but it is not a library`;
     }
-
-    loadIntoScope(global, path.resolve(process.cwd(), "externs.js"));
-    loadIntoScope(global.ING, libraryPath);
+    global[common.CONFIG.namespace] = {};    
+    loadIntoScope(global[common.CONFIG.namespace], libraryPath);
 }
 
 function activity(global) {
-    loadIntoScope(global, path.resolve(process.cwd(), "externs.js"));
+    loadBasics(global);
 }
 
 module.exports = {
-    loadExterns: loadExterns,
     library: library,
     activity: activity,
 };
